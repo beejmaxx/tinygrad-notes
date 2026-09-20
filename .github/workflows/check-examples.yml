@@ -1,0 +1,28 @@
+name: Check tutorial examples
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/checkout@v6
+        with:
+          repository: tinygrad/tinygrad
+          ref: 8ad8f738755c3ab157d356aedd5d5c108aa1a642
+          path: .tinygrad-checkout
+      - name: Install the pinned tinygrad revision
+        run: python3 -m pip install -e .tinygrad-checkout
+      - name: Run all Python examples on CPU
+        run: python3 scripts/check_examples.py .tinygrad-checkout

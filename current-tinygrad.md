@@ -1,92 +1,59 @@
-# Current tinygrad: from tensors to execution
+# Setup and how to use these notes
 
-[All tutorials](README.md)
+[All tutorials](README.md) · Updated September 21, 2026
 
-Updated September 21, 2026 against [upstream commit `8ad8f73`](https://github.com/tinygrad/tinygrad/tree/8ad8f738755c3ab157d356aedd5d5c108aa1a642).
-The latest tagged release is [0.14.0](https://github.com/tinygrad/tinygrad/releases/tag/v0.14.0); this chapter follows the newer master snapshot above. Python 3.11 or newer is required.
+These tutorials follow [tinygrad commit `8ad8f73`](https://github.com/tinygrad/tinygrad/tree/8ad8f738755c3ab157d356aedd5d5c108aa1a642), a master snapshot after the 0.14.0 release. Internal APIs change frequently; a source link's pinned commit is part of the example's context.
 
-Di Zhu's original tutorials teach useful compiler ideas, but several internal APIs have moved or disappeared. Start with a small program that runs on today's tree, then follow the objects it actually uses.
+## Install the documented revision
 
-## A computation with known inputs
+Use Python 3.11 or newer. Check `python3 --version`; some Macs still resolve that name to an older system Python.
 
-```python
-from tinygrad import Tensor
-
-a = Tensor([[1.0, 2.0], [3.0, 4.0]])
-b = Tensor([[10.0, 20.0], [30.0, 40.0]])
-c = a + b
-print(c.tolist())
-# [[11.0, 22.0], [33.0, 44.0]]
+```sh
+git clone https://github.com/tinygrad/tinygrad.git
+cd tinygrad
+git switch --detach 8ad8f738755c3ab157d356aedd5d5c108aa1a642
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -e .
 ```
 
-`a + b` constructs a computation; `tolist()` asks for its values and transfers them to a Python list. To request execution while retaining a Tensor, use `c.realize()`.
+Use a fresh clone for this command sequence. Detaching at a known commit makes examples reproducible; use a separate branch/current checkout when developing a contribution.
 
-Use initialized inputs for experiments. `Tensor.empty` allocates uninitialized storage: zeros observed on one device are not a guarantee. The old introduction's zero output should not be used as a correctness expectation.
+For the portable examples, use `DEV=CPU`. The CPU compiler path needs its native compiler dependencies; consult the [pinned runtime documentation](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/docs/runtime.md) if your environment cannot compile a kernel.
 
-Save the program as `example.py`. Run `DEBUG=2 python3 example.py` to inspect execution statistics, then `DEBUG=4 python3 example.py` to see generated source. Exact kernels, launch dimensions, and timings depend on the selected backend and optimization choices.
+## Read the implementation in order
 
-## Follow the current pipeline
+Start with [the introduction](20241231_intro.md), then [movement and indexing](20241217_st.md), [scheduling](scheduleitem.md), and [code generation](codegen.md).
 
-The [upstream developer overview](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/docs/developer/developer.md) divides the framework into frontend, scheduler, lowering, and execution.
+The earlier tutorials used ShapeTracker, LazyBuffer, ScheduleItem, and a Linearizer class. Today's chapters explain the current representations instead:
 
-| Stage | Current source | What to look for |
-| --- | --- | --- |
-| Tensor frontend | [`tinygrad/tensor.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/tensor.py) | Tensor operations construct UOps; `realize` requests execution. |
-| Shared graph representation | [`tinygrad/uop/ops.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/uop/ops.py) | `UOp`, `UPat`, `PatternMatcher`, and `graph_rewrite`. |
-| Scheduling | [`tinygrad/schedule/__init__.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/schedule/__init__.py) | Preparation and rangeification create a kernel graph; `create_schedule` orders it into a `LINEAR` UOp. |
-| Kernel lowering | [`tinygrad/codegen`](https://github.com/tinygrad/tinygrad/tree/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/codegen) | Rewrites and optimization turn kernel computations into target-ready operations. |
-| Rendering and device support | [`tinygrad/renderer`](https://github.com/tinygrad/tinygrad/tree/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/renderer), [`tinygrad/runtime`](https://github.com/tinygrad/tinygrad/tree/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/runtime) | Target representation, compilation, allocation, and program launch. |
-| Execution | [`tinygrad/engine/realize.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/engine/realize.py) | `run_linear` dispatches the calls in the execution graph. |
+| Earlier explanation | Current starting point |
+| --- | --- |
+| ShapeTracker/View transformations | Movement UOps and `schedule/indexing.py` coordinate propagation |
+| LazyBuffer graph | Tensor `.uop` graph |
+| ScheduleItem lists | LINEAR/CALL UOps and buffer-state dependencies |
+| Linearizer optimization methods | Kernel range optimization in `codegen/opt/postrange.py` |
+| ALU opcode with an arithmetic argument | Individual ADD, MUL, and other operation nodes |
+| JIT as a second compilation step | Captured execution graph and replay |
 
-The schedule is now represented with UOps too: a `LINEAR` contains ordered `CALL`s. Older tutorials showing lists of `ScheduleItem`s or importing graph operations from `tinygrad.ops` need translation to the current tree. For an experiment, inspect `Tensor.schedule_linear`; do not assume an old `Tensor.schedule()` snippet still applies.
+These are conceptual transitions, not a table of interchangeable imports. Read the linked chapters before porting an old snippet.
 
-## Where did ShapeTracker go?
+## Validation coverage
 
-The current tree has no `tinygrad.shape.shapetracker` or `tinygrad.shape.view` module. The [original ShapeTracker chapter](20241217_st.md) remains useful for understanding strides, views, masks, and index expressions, but its imports belong to the historical implementation.
+The 32 Python code blocks in the revised chapters are self-contained and executable. All passed locally on CPU and Metal with Python 3.14.6 on macOS against the pinned checkout. The example runner launches each in a separate process with ordinary JIT enabled. Assertions check values, graph properties, coordinate mappings, capture behavior, or fragment layouts as appropriate. GitHub Actions runs these examples on Linux with Python 3.12 for each change.
 
-Read today's movement operations in `tinygrad/uop/ops.py` alongside [`tinygrad/schedule/rangeify.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/schedule/rangeify.py) and [`tinygrad/schedule/indexing.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/schedule/indexing.py). These are starting points for following how movement and indexing are represented and lowered; there is no drop-in replacement import for the old tutorial.
+From the notes repository, using the Python environment containing tinygrad's dependencies:
 
-This public Tensor example still demonstrates the underlying idea:
-
-```python
-from tinygrad import Tensor
-
-x = Tensor([[1, 2], [3, 4]])
-print(x.permute(1, 0).tolist())
-# [[1, 3], [2, 4]]
+```sh
+python3 scripts/check_examples.py /path/to/tinygrad
 ```
 
-The logical transpose does not, by itself, establish how a particular downstream kernel will access memory. Inspect the generated program to answer that question.
+Use `--device METAL` on a supported Mac to repeat the suite there. Use `--allow-other-revision` deliberately when checking a newer checkout; passing on one revision does not guarantee future compatibility.
 
-## What TinyJit captures now
+Shell commands for BEAM tuning, VIZ inspection, and hardware exercises are not silently counted as executed Python examples. CUDA tensor-core layout checks run on the host; they do not execute NVIDIA instructions. Multi-GPU transfers and collectives require real multi-device testing. No portable hardware speedup numbers are claimed.
 
-[`tinygrad/engine/jit.py`](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/engine/jit.py) makes the default sequence explicit: first call runs the Python function, second call runs it while capturing execution, subsequent calls replay the captured work. Capture combines `LINEAR` graphs, plans memory, and lowers the captured execution. Device graph batching is backend-dependent.
+## Provenance and contributions
 
-```python
-from tinygrad import Tensor, TinyJit
+Di Zhu's original articles remain available through the historical link at the end of each revised chapter. The original screenshots and image files remain in the repository, but current explanations do not present historical screenshots as captures of this revision.
 
-@TinyJit
-def double(x):
-  return (x * 2).realize()
-
-for value in (1.0, 2.0, 3.0):
-  x = Tensor([value]).realize()
-  print(double(x).tolist())
-# [2.0]
-# [4.0]
-# [6.0]
-```
-
-This is execution capture and replay, not merely a second stage of GPU compilation. The replay path checks input names and expected input information; arbitrary changes to input structure are not automatically retraced. Python side effects inside the function do not run on every replay.
-
-## Inspect rewrites with VIZ
-
-The current [VIZ README](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/tinygrad/viz/README.md) covers both rewrite inspection and profiling. `VIZ=1 python3 example.py` records the data and, in an interactive shell, launches the viewer. A command-line viewer is also available through `python3 -m tinygrad.viz.cli`.
-
-The old screenshots remain illustrations of earlier versions. Follow the current README for viewer commands and flags.
-
-## Continuing the update
-
-This first pass checks the three runnable examples above and maps the major changes in the execution path. The next chapters to revise in depth are the introduction, JIT, pattern matching, and the historical ShapeTracker material. The original BEAM, convolution, matrix-multiplication, and hardware articles still require individual checks against this snapshot.
-
-Before contributing upstream, read the current [contribution rules](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/README.md#contributing), including the requirements for regression tests, benchmarks, and disclosure of AI use. This fork is an independent tutorial update, with AI assistance; it is not official tinygrad documentation.
+This fork's updates were made with AI assistance. For upstream tinygrad contributions, read the current [README contribution rules](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/README.md#contributing) and [AGENTS.md](https://github.com/tinygrad/tinygrad/blob/8ad8f738755c3ab157d356aedd5d5c108aa1a642/AGENTS.md), including AI disclosure requirements. These tutorials are independent of the project.
