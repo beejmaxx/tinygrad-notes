@@ -1,9 +1,14 @@
 # Tutorials on Tinygrad 
 
-[View on Github](https://github.com/mesozoic-egg/tinygrad-notes) |
-[View on Website](https://mesozoic-egg.github.io/tinygrad-notes)
+[View on Github](https://github.com/beejmaxx/tinygrad-notes) |
+[View on Website](https://beejmaxx.github.io/tinygrad-notes/)
 
-All of the pre-requisite knowledge you need before contributing to tinygrad.
+Tutorials on tinygrad internals, originally written by [Di Zhu (mesozoic-egg)](https://github.com/mesozoic-egg/tinygrad-notes).
+This fork is being updated for current tinygrad, with the original chapters and URLs preserved.
+
+- [Current tinygrad: start here](current-tinygrad.md): updated September 21, 2026, against upstream `8ad8f73`.
+
+The chapters below are the original tutorials. Their code and screenshots describe older versions; the current walkthrough explains the first major differences. Updates are in progress, and the full archive has not yet been revalidated.
 
 - [Introduction](20241231_intro.md): **Read this first!!**
 
