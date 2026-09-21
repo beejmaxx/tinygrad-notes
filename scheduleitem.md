@@ -42,6 +42,8 @@ prepare_rangeify(function)
 
 ## Why AFTER matters
 
+The [worked movement trace](movement-trace.md#4-schedule-one-call-two-buffers) includes the complete scheduled `LINEAR`: one call, a six-float input, and a five-float output. Inspecting its parameters shows that the logically 20-element padded intermediate has not been allocated as a separate buffer. This connects fusion to concrete storage, rather than inferring it from Tensor syntax alone.
+
 `AFTER` passes its first source through while imposing dependencies on its other sources. The scheduler tracks buffer states, not just a bag of arithmetic expressions.
 
 Suppose one kernel reads a buffer's old value and another overwrites that buffer. The reader must precede the overwrite even if the overwrite does not consume the reader's output. This is a write-after-read dependency.

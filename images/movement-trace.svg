@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 300" role="img" aria-labelledby="title desc">
+<title id="title">Transpose, pad, add ten, reduce</title>
+<desc id="desc">Input rows 1 2 3 and 4 5 6 transpose to rows 1 4, 2 5, 3 6. A border of zeros gives five rows of four. Adding ten to every cell and summing each row gives 40, 45, 47, 49, 40.</desc>
+<rect width="840" height="300" rx="8" fill="#f6f8fa"/>
+<g font-family="monospace" font-size="19" fill="#24292e" text-anchor="middle">
+<text x="100" y="40">input (2,3)</text><text x="295" y="40">transpose</text><text x="510" y="40">pad (5,4)</text><text x="745" y="40">row sum</text>
+<text x="100" y="120">1 2 3</text><text x="100" y="160">4 5 6</text>
+<text x="195" y="145">→</text>
+<text x="295" y="100">1 4</text><text x="295" y="140">2 5</text><text x="295" y="180">3 6</text>
+<text x="395" y="145">→</text>
+<rect x="422" y="61" width="176" height="208" fill="#e1e4e8" rx="5"/>
+<rect x="474" y="100" width="72" height="120" fill="#d1f0dd"/>
+<text x="510" y="88">0 0 0 0</text><text x="510" y="128">0 1 4 0</text><text x="510" y="168">0 2 5 0</text><text x="510" y="208">0 3 6 0</text><text x="510" y="248">0 0 0 0</text>
+<text x="650" y="125" font-size="15">+10</text><text x="650" y="148" font-size="15">each cell</text><text x="650" y="175">→</text>
+<text x="745" y="88">40</text><text x="745" y="128">45</text><text x="745" y="168">47</text><text x="745" y="208">49</text><text x="745" y="248">40</text>
+</g></svg>

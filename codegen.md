@@ -37,6 +37,8 @@ The later stages prepare operations the renderer can handle, arrange control flo
 
 ## Two meanings of LINEAR
 
+The [captured CPU and Metal trace](movement-trace.md#5-compiled-cpu-source-where-did-the-loops-go) provides a concrete counterexample to “one RANGE means one loop”: its scheduled reduction range of four becomes explicit arithmetic and vector stores, with all padding predicates resolved. The original graphs and emitted source are available together, so the simplification can be checked against the input/output mapping.
+
 A schedule's `LINEAR` contains executable calls. A program's `LINEAR` contains the ordered low-level operations for one kernel. The opcode alone is not enough to identify the abstraction level; inspect its surrounding graph and sources.
 
 Likewise, a `RANGE` in a high-level kernel can be transformed into GPU launch dimensions, expanded values, or ordinary loops. Do not assume every range becomes a source-language `for` loop.

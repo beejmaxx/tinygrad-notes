@@ -1,0 +1,8 @@
+#include <metal_stdlib>
+using namespace metal;
+kernel void r_5_4(device float* data0_5, device float* data1_6, uint3 gid [[threadgroup_position_in_grid]], uint3 lid [[thread_position_in_threadgroup]]) {
+  float4 val0 = (*((device float4*)((data1_6+0))));
+  float2 val1 = (*((device float2*)((data1_6+4))));
+  *(data0_5+4) = 40.0f;
+  *((device float4*)((data0_5+0))) = float4(40.0f,(val0.w+val0.x+40.0f),(val1.x+val0.y+40.0f),(val1.y+val0.z+40.0f));
+}

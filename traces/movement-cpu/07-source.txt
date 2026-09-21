@@ -1,0 +1,9 @@
+typedef float float4 __attribute__((aligned(16),ext_vector_type(4)));
+typedef float float2 __attribute__((aligned(8),ext_vector_type(2)));
+void r_5_4(float* restrict data0_5, float* restrict data1_6) {
+  float4 val0 = (*((float4*)((data1_6+0))));
+  float2 val1 = (*((float2*)((data1_6+4))));
+  *(data0_5+4) = 40.0f;
+  *((float4*)((data0_5+0))) = (float4){40.0f,(val0[3]+val0[0]+40.0f),(val1[0]+val0[1]+40.0f),(val1[1]+val0[2]+40.0f)};
+}
+

@@ -1,0 +1,102 @@
+UOp(Ops.PROGRAM, arg=ProgramInfo(global_size=(1, 1, 1), local_size=(1, 1, 1), vars=(), globals=(0, 1), outs=(0,), ins=(1,), target=CPU::arm64,native), src=(
+  UOp(Ops.SINK, arg=KernelInfo(name='r_5_4', applied_opts=(Opt(op=OptOps.SPLIT, axis=0, arg=(0, AxisType.UPCAST)), Opt(op=OptOps.SPLIT, axis=1, arg=(0, AxisType.UNROLL))), opts_to_apply=None, estimates=Estimates(ops=6, lds=44, mem=44), beam=0), src=(
+    x1:=UOp(Ops.STORE, arg=None, src=(
+      x2:=UOp(Ops.SHRINK, arg=None, src=(
+        x3:=UOp(Ops.PARAM, arg=ParamArg(0, dtypes.float, 5, device='CPU'), src=()),
+        x4:=UOp(Ops.CAST, arg=dtypes.int, src=(
+          x5:=UOp(Ops.CONST, arg=0, src=()),)),
+        x6:=UOp(Ops.CAST, arg=dtypes.int, src=(
+          x7:=UOp(Ops.CONST, arg=4, src=()),)),)),
+      x8:=UOp(Ops.STACK, arg=None, src=(
+        x9:=UOp(Ops.CAST, arg=dtypes.float, src=(
+          x10:=UOp(Ops.CONST, arg=ConstFloat(40.0), src=()),)),
+        x11:=UOp(Ops.ADD, arg=None, src=(
+          x12:=UOp(Ops.ADD, arg=None, src=(
+            x13:=UOp(Ops.INDEX, arg=None, src=(
+              x14:=UOp(Ops.LOAD, arg=None, src=(
+                x15:=UOp(Ops.SHRINK, arg=None, src=(
+                  x16:=UOp(Ops.PARAM, arg=ParamArg(1, dtypes.float, 6, device='CPU'), src=()),
+                  x4,
+                  x6,)),)),
+              x17:=UOp(Ops.CAST, arg=dtypes.int, src=(
+                x18:=UOp(Ops.CONST, arg=3, src=()),)),)),
+            x19:=UOp(Ops.INDEX, arg=None, src=(
+              x14,
+              x4,)),)),
+          x9,)),
+        x20:=UOp(Ops.ADD, arg=None, src=(
+          x21:=UOp(Ops.ADD, arg=None, src=(
+            x22:=UOp(Ops.INDEX, arg=None, src=(
+              x23:=UOp(Ops.LOAD, arg=None, src=(
+                x24:=UOp(Ops.SHRINK, arg=None, src=(
+                  x16,
+                  x6,
+                  x25:=UOp(Ops.CAST, arg=dtypes.int, src=(
+                    x26:=UOp(Ops.CONST, arg=2, src=()),)),)),)),
+              x4,)),
+            x27:=UOp(Ops.INDEX, arg=None, src=(
+              x14,
+              x28:=UOp(Ops.CAST, arg=dtypes.int, src=(
+                x29:=UOp(Ops.CONST, arg=1, src=()),)),)),)),
+          x9,)),
+        x30:=UOp(Ops.ADD, arg=None, src=(
+          x31:=UOp(Ops.ADD, arg=None, src=(
+            x32:=UOp(Ops.INDEX, arg=None, src=(
+              x23,
+              x28,)),
+            x33:=UOp(Ops.INDEX, arg=None, src=(
+              x14,
+              x25,)),)),
+          x9,)),)),)),
+    x1,
+    x1,
+    x1,
+    x34:=UOp(Ops.STORE, arg=None, src=(
+      x35:=UOp(Ops.INDEX, arg=None, src=(
+        x3,
+        x6,)),
+      x9,)),)),
+  UOp(Ops.LINEAR, arg=None, src=(
+    x3,
+    x16,
+    x5,
+    x4,
+    x7,
+    x6,
+    x15,
+    x14,
+    x26,
+    x25,
+    x24,
+    x23,
+    x19,
+    x29,
+    x28,
+    x27,
+    x33,
+    x18,
+    x17,
+    x13,
+    x22,
+    x32,
+    x10,
+    x9,
+    x12,
+    x21,
+    x31,
+    x11,
+    x20,
+    x30,
+    x8,
+    x35,
+    x2,
+    x34,
+    x1,
+    UOp(Ops.SINK, arg=KernelInfo(name='r_5_4', applied_opts=(Opt(op=OptOps.SPLIT, axis=0, arg=(0, AxisType.UPCAST)), Opt(op=OptOps.SPLIT, axis=1, arg=(0, AxisType.UNROLL))), opts_to_apply=None, estimates=None, beam=0), src=(
+      x1,
+      x1,
+      x1,
+      x1,
+      x34,)),)),
+  UOp(Ops.SOURCE, arg='typedef float float4 __attribute__((aligned(16),ext_vector_type(4)));\ntypedef float float2 __attribute__((aligned(8),ext_vector_type(2)));\nvoid r_5_4(float* restrict data0_5, float* restrict data1_6) {\n  float4 val0 = (*((float4*)((data1_6+0))));\n  float2 val1 = (*((float2*)((data1_6+4))));\n  *(data0_5+4) = 40.0f;\n  *((float4*)((data0_5+0))) = (float4){40.0f,(val0[3]+val0[0]+40.0f),(val1[0]+val0[1]+40.0f),(val1[1]+val0[2]+40.0f)};\n}\n', src=()),
+  UOp(Ops.BINARY, arg=b'\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\xb7\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x000\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00@\x00\x06\x00\x01\x00 \x00\xc0=!\x08@\xfd\x08D\xa8R\x08\x10\x00\xb9\x02@\x00nB \x01.\x03\r\x04\x0e\x02\xd4"\x0eB\xd4#\x0e\x03\x01\'\x1ed \x03n\x82`\x02n!\x04\x0c^\x00\x04\x14^\x00(!\x1e\x00(#\x1e\x02\x04\x1cn\x02\x00\x80=\xc0\x03_\xd6\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\x00\x00\x00\x04\x00\xf1\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x008\x00\x00\x00\x12\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00L\x00\x00\x00\x00\x00\x00\x00\x00$x\x00.text\x00.note.GNU-stack\x00.llvm_addrsig\x00.strtab\x00.symtab\x00r_5_4\x00-\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00(\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf0\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x01\x00\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00L\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1a\x00\x00\x00\x03L\xffo\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x000\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00`\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x03\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x00', src=()),))

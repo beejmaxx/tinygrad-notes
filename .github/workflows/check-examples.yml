@@ -26,3 +26,5 @@ jobs:
         run: python3 -m pip install -e .tinygrad-checkout
       - name: Run all Python examples on CPU
         run: python3 scripts/check_examples.py .tinygrad-checkout
+      - name: Exercise compiler trace instrumentation
+        run: PYTHONPATH=.tinygrad-checkout DEV=CPU python3 scripts/trace_movement.py /tmp/movement-trace

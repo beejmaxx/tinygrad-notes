@@ -1,0 +1,95 @@
+{
+  "revision": "8ad8f738755c3ab157d356aedd5d5c108aa1a642",
+  "python": "3.14.6",
+  "device": "CPU",
+  "renderer": "ClangRenderer",
+  "target": "ProgramInfo(global_size=(1, 1, 1), local_size=(1, 1, 1), vars=(), globals=(0, 1), outs=(0,), ins=(1,), target=CPU::arm64,native)",
+  "settings": {
+    "SCACHE": 0,
+    "BEAM": 0
+  },
+  "result": [
+    40.0,
+    45.0,
+    47.0,
+    49.0,
+    40.0
+  ],
+  "nodes": {
+    "01-tensor": {
+      "ADD": 1,
+      "BUFFER": 1,
+      "CONST": 6,
+      "PAD": 1,
+      "PERMUTE": 2,
+      "REDUCE": 1,
+      "RESHAPE": 1,
+      "STACK": 3
+    },
+    "02-prepared": {
+      "ADD": 1,
+      "AFTER": 1,
+      "CONST": 6,
+      "PAD": 1,
+      "PARAM": 2,
+      "PERMUTE": 2,
+      "REDUCE": 1,
+      "RESHAPE": 1,
+      "SINK": 1,
+      "STACK": 3,
+      "STORE": 1
+    },
+    "03-rangeified": {
+      "ADD": 3,
+      "AFTER": 1,
+      "AND": 5,
+      "CMPLT": 4,
+      "CMPNE": 2,
+      "CONST": 9,
+      "END": 1,
+      "INDEX": 2,
+      "MUL": 1,
+      "PARAM": 2,
+      "RANGE": 2,
+      "REDUCE": 1,
+      "SINK": 1,
+      "STORE": 1,
+      "WHERE": 2
+    },
+    "05-schedule": {
+      "ADD": 3,
+      "AND": 3,
+      "BUFFER": 2,
+      "CALL": 1,
+      "CMPLT": 4,
+      "CMPNE": 2,
+      "CONST": 9,
+      "END": 1,
+      "INDEX": 2,
+      "LINEAR": 1,
+      "MUL": 1,
+      "PARAM": 2,
+      "RANGE": 2,
+      "REDUCE": 1,
+      "SINK": 1,
+      "STORE": 1,
+      "WHERE": 2
+    },
+    "06-program": {
+      "ADD": 6,
+      "BINARY": 1,
+      "CAST": 6,
+      "CONST": 6,
+      "INDEX": 7,
+      "LINEAR": 1,
+      "LOAD": 2,
+      "PARAM": 2,
+      "PROGRAM": 1,
+      "SHRINK": 3,
+      "SINK": 2,
+      "SOURCE": 1,
+      "STACK": 1,
+      "STORE": 2
+    }
+  }
+}

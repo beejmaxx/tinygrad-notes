@@ -1,0 +1,17 @@
+UOp(Ops.REDUCE, arg=(Ops.ADD, 1), src=(
+  UOp(Ops.PERMUTE, arg=(1, 0), src=(
+    UOp(Ops.ADD, arg=None, src=(
+      UOp(Ops.PAD, arg=None, src=(
+        UOp(Ops.PERMUTE, arg=(1, 0), src=(
+          UOp(Ops.RESHAPE, arg=None, src=(
+            UOp(Ops.BUFFER, arg=ParamArg(1, dtypes.float, 6, device='METAL'), src=()),
+            UOp(Ops.STACK, arg=None, src=(
+              UOp(Ops.CONST, arg=2, src=()),
+              UOp(Ops.CONST, arg=3, src=()),)),)),)),
+        UOp(Ops.STACK, arg=None, src=(
+          x10:=UOp(Ops.CONST, arg=1, src=()),
+          x10,)),
+        UOp(Ops.STACK, arg=None, src=(
+          UOp(Ops.CONST, arg=5, src=()),
+          UOp(Ops.CONST, arg=4, src=()),)),)),
+      UOp(Ops.CONST, arg=ConstFloat(10.0), src=()),)),)),))

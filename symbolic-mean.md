@@ -37,7 +37,24 @@ print(x.mean().item())
 
 [OpMixin.mean][op] chooses a result dtype, casts for accumulation, sums along the requested axes, computes a denominator from the reduced shape dimensions, divides, and casts the result. It preserves symbolic arithmetic where sizes are symbolic rather than evaluating every shape as a Python integer.
 
-This page checks scalar symbolic evaluation and concrete mean behavior. It does not claim that arbitrary shape-polymorphic Tensor programs work across every backend or JIT input pattern. For a symbolic-shape change, test the actual Tensor construction, bindings, scheduling, and replay path over several legal values.
+## Execute a genuinely symbolic reduction dimension
+
+```python
+from tinygrad import Tensor
+from tinygrad.uop.ops import UOp
+
+base = Tensor.arange(24).reshape(8, 3).realize()
+n = UOp.variable("n", 1, 8)
+for size in (1, 3, 8):
+  x = base.shrink(((0, n.bind(size)), (0, 3)))
+  assert isinstance(x.shape[0], UOp)
+  actual = x.mean(axis=0).tolist()
+  expected = [sum(3*r+c for r in range(size))/size for c in range(3)]
+  assert actual == expected, (size, actual, expected)
+print("symbolic reduction bound at 1, 3, and 8")
+```
+
+The backing allocation has eight rows, but the logical first dimension is a bound symbolic UOp. Reducing that dimension must divide by the bound row count, not the backing allocation's row count or the variable's maximum. The independent Python oracle checks both endpoints and one interior binding. This exercises Tensor construction, symbolic shrinking, scheduling, and execution; it does not claim arbitrary shape-polymorphic JIT replay or support across every backend.
 
 Zero-length reductions and bounds are separate edge cases. Do not infer their behavior from the positive-size example.
 

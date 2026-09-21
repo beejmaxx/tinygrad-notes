@@ -12,6 +12,7 @@ The chapters now explain the current UOp, rangeification, scheduling, compilatio
 
 - [Setup and how to use these notes](current-tinygrad.md)
 - [Introduction: from Tensor values to execution](20241231_intro.md)
+- [Worked compiler trace: transpose → pad → add → reduce](movement-trace.md) — captured UOps, CPU/Metal source, and an independent regression oracle
 - [Shapes, movement operations, and indexing](20241217_st.md) — replaces the ShapeTracker chapter
 - [Scheduling with LINEAR, CALL, and buffer dependencies](scheduleitem.md)
 - [The current UOp IR](uops-doc.md)

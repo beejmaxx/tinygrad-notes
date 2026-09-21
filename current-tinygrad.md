@@ -40,7 +40,9 @@ These are conceptual transitions, not a table of interchangeable imports. Read t
 
 ## Validation coverage
 
-The 32 Python code blocks in the revised chapters are self-contained and executable. All passed locally on CPU and Metal with Python 3.14.6 on macOS against the pinned checkout. The example runner launches each in a separate process with ordinary JIT enabled. Assertions check values, graph properties, coordinate mappings, capture behavior, or fragment layouts as appropriate. GitHub Actions runs these examples on Linux with Python 3.12 for each change.
+The [worked compiler trace](movement-trace.md) adds captured Tensor, prepared, rangeified, scheduled, and compiled graphs, with executed CPU arm64 and Metal Apple7 output. The example suite also checks 15 transpose/flip/asymmetric-pad/broadcast/reduction combinations against a Python oracle, JIT replay with changed data and incompatible-shape rejection, and symbolic means at three bindings. CI regenerates a CPU trace to detect broken instrumentation; it does not compare target-dependent emitted source byte for byte.
+
+The 36 Python code blocks in the revised chapters are self-contained and executable. The example runner launches each in a separate process with ordinary JIT enabled. Assertions check values, graph properties, coordinate mappings, capture behavior, or fragment layouts as appropriate. GitHub Actions runs these examples on Linux with Python 3.12 for each change. The local validation targets are CPU and Metal with Python 3.14.6 on macOS against the pinned checkout.
 
 From the notes repository, using the Python environment containing tinygrad's dependencies:
 

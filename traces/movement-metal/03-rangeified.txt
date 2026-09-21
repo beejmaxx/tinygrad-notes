@@ -1,0 +1,52 @@
+UOp(Ops.SINK, arg=None, src=(
+  UOp(Ops.AFTER, arg=None, src=(
+    x1:=UOp(Ops.PARAM, arg=ParamArg(0, dtypes.float, 5, device='METAL'), src=()),
+    UOp(Ops.END, arg=None, src=(
+      UOp(Ops.STORE, arg=None, src=(
+        UOp(Ops.INDEX, arg=None, src=(
+          x1,
+          x5:=UOp(Ops.RANGE, arg=(0, AxisType.WEAK), src=(
+            UOp(Ops.CONST, arg=5, src=()),)),)),
+        UOp(Ops.REDUCE, arg=(Ops.ADD, 0), src=(
+          UOp(Ops.ADD, arg=None, src=(
+            UOp(Ops.WHERE, arg=None, src=(
+              UOp(Ops.AND, arg=None, src=(
+                UOp(Ops.AND, arg=None, src=(
+                  x12:=UOp(Ops.CONST, arg=True, src=()),
+                  x13:=UOp(Ops.AND, arg=None, src=(
+                    UOp(Ops.CMPNE, arg=None, src=(
+                      UOp(Ops.CMPLT, arg=None, src=(
+                        x5,
+                        x16:=UOp(Ops.CONST, arg=1, src=()),)),
+                      x12,)),
+                    UOp(Ops.CMPLT, arg=None, src=(
+                      x5,
+                      x18:=UOp(Ops.CONST, arg=4, src=()),)),)),)),
+                x19:=UOp(Ops.AND, arg=None, src=(
+                  UOp(Ops.CMPNE, arg=None, src=(
+                    UOp(Ops.CMPLT, arg=None, src=(
+                      x22:=UOp(Ops.RANGE, arg=(1, AxisType.REDUCE), src=(
+                        x18,)),
+                      x16,)),
+                    x12,)),
+                  UOp(Ops.CMPLT, arg=None, src=(
+                    x22,
+                    x24:=UOp(Ops.CONST, arg=3, src=()),)),)),)),
+              UOp(Ops.INDEX, arg=None, src=(
+                UOp(Ops.PARAM, arg=ParamArg(1, dtypes.float, 6, device='METAL'), src=()),
+                UOp(Ops.WHERE, arg=None, src=(
+                  UOp(Ops.AND, arg=None, src=(
+                    x13,
+                    x19,)),
+                  UOp(Ops.ADD, arg=None, src=(
+                    UOp(Ops.ADD, arg=None, src=(
+                      UOp(Ops.MUL, arg=None, src=(
+                        x22,
+                        x24,)),
+                      x5,)),
+                    UOp(Ops.CONST, arg=-4, src=()),)),
+                  UOp(Ops.CONST, arg=Invalid, src=()),)),)),
+              UOp(Ops.CONST, arg=ConstFloat(0.0), src=()),)),
+            UOp(Ops.CONST, arg=ConstFloat(10.0), src=()),)),
+          x22,)),)),
+      x5,)),)),))
